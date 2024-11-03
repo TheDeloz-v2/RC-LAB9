@@ -19,6 +19,16 @@ def convert_to_json(data):
     return json.dumps(data)
 
 def get_data():
+    """
+    Simulates sensor data for temperature, humidity, and wind direction.
+
+    Returns:
+        dict: A dictionary containing the following keys:
+            - "temperature" (float): Simulated temperature value, rounded to 2 decimal places,
+              constrained between 0 and 110.
+            - "humidity" (int): Simulated humidity value, constrained between 0 and 100.
+            - "wind_direction" (str): Simulated wind direction, randomly chosen from predefined directions.
+    """
     temperature = max(0, min(round(random.normalvariate(55, 10), 2), 110))
     humidity = max(0, min(int(random.normalvariate(55, 15)), 100))
     direction = random.choice(list(wind_direction.keys()))
@@ -26,6 +36,15 @@ def get_data():
     return sensor_data
 
 def encode(data):
+    """
+    Encodes sensor data into a binary payload.
+
+    Args:
+        data (dict): A dictionary containing sensor data with temperature, humidity and wind_direction.
+
+    Returns:
+        bytes: A 4-byte binary payload representing the encoded sensor data.
+    """
     temperature = int(data["temperature"] * 100) & 0b111111111111
     humidity = int(data["humidity"]) & 0b1111111
     direction = wind_direction[data["wind_direction"]]
@@ -33,6 +52,15 @@ def encode(data):
     return struct.pack('>I', payload)
 
 def decode(data):
+    """
+    Decodes the given binary data into a dictionary containing temperature, humidity, and wind direction.
+    
+    Args:
+        data (bytes): A 4-byte binary string containing encoded sensor data.
+        
+    Returns:
+        dict: A dictionary containing sensor data with temperature, humidity and wind_direction.
+    """
     payload = struct.unpack('>I', data)[0]
     temperature = ((payload >> 20) & 0b111111111111) / 100
     humidity = (payload >> 13) & 0b1111111
