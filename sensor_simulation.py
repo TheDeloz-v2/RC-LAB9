@@ -9,9 +9,9 @@ wind_direction = {
     "E": 0b010,
     "SE": 0b011,
     "S": 0b100,
-    "SW": 0b101,
-    "W": 0b110,
-    "NW": 0b111
+    "SO": 0b101,
+    "O": 0b110,
+    "NO": 0b111
 }
 reverse_wind_direction = {v: k for k, v in wind_direction.items()}
 
