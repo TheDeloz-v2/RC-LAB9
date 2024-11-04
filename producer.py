@@ -1,8 +1,7 @@
 import time
 import random
-import json
 from kafka import KafkaProducer
-from sensor_simulation import get_data, convert_to_json
+from sensor_simulation import get_data, encode
 
 # Configuración del servidor Kafka
 KAFKA_SERVER = 'lab9.alumchat.lol:9092'
@@ -49,7 +48,7 @@ def send_data_with_retry(producer, topic, data, retries=3):
 try:
     producer = KafkaProducer(
         bootstrap_servers=KAFKA_SERVER,
-        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+        value_serializer=lambda v: encode(v)
     )
 except Exception as e:
     print(f"Kafka connection error: {e}")
